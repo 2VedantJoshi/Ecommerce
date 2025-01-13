@@ -1,0 +1,100 @@
+/* Default Styles */
+.popular {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    height: 90vh;
+}
+
+.popular h1 {
+    color: #171717;
+    font-size: 50px;
+    font-weight: 600;
+}
+
+.popular hr {
+    width: 200px;
+    height: 6px;
+    border-radius: 10px;
+    background: #252525;
+}
+
+.popular-item {
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Default: 4 items per row */
+    gap: 30px;
+}
+
+/* Media Queries */
+
+/* For screens with a max-width of 1280px */
+@media (max-width: 1280px) {
+    .popular{
+        height: auto;
+    }
+    .popular h1 {
+        font-size: 40px; /* Reduce font size */
+    }
+    .popular hr {
+        width: 160px; /* Adjust line width */
+        height: 5px; /* Adjust line height */
+    }
+    .popular-item {
+        grid-template-columns: repeat(2, 1fr); /* 3 items per row */
+        gap: 20px; /* Reduce gap between items */
+    }
+}
+
+/* For screens with a max-width of 1024px */
+@media (max-width: 1024px) {
+    .popular{
+        height: auto;
+    }
+    .popular h1 {
+        font-size: 36px; /* Further reduce font size */
+    }
+    .popular hr {
+        width: 140px; /* Adjust line width */
+        height: 4px; /* Adjust line height */
+    }
+    .popular-item {
+        grid-template-columns: repeat(2, 1fr); /* 2 items per row */
+        gap: 25px; /* Adjust gap for smaller layout */
+    }
+}
+
+/* For screens with a max-width of 800px */
+@media (max-width: 800px) {
+    .popular h1 {
+        font-size: 32px; /* Further reduce font size */
+    }
+    .popular hr {
+        width: 120px; /* Adjust line width */
+        height: 3px; /* Adjust line height */
+    }
+    .popular-item {
+        
+        grid-template-columns: 1fr; /* 1 item per row */
+        gap: 20px; /* Adjust gap for single item layout */
+    }
+}
+
+/* For screens with a max-width of 500px */
+@media (max-width: 500px) {
+    .popular {
+        height: auto; /* Adjust height for small screens */
+        padding: 20px; /* Add padding for spacing */
+    }
+    .popular h1 {
+        font-size: 28px; /* Further reduce font size */
+    }
+    .popular hr {
+        width: 100px; /* Adjust line width */
+        height: 2px; /* Adjust line height */
+    }
+    .popular-item {
+        gap: 15px; /* Adjust gap for single item layout */
+    }
+}

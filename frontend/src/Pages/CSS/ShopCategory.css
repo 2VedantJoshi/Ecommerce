@@ -1,0 +1,113 @@
+/* Default Styles */
+.shopcategory-banner {
+    display: block;
+    margin: 30px auto;
+    width: 96%;
+    justify-content: center;
+}
+
+.shopcategory-indexsort {
+    display: flex;
+    margin: 0px 30px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.shopcategory-sort {
+    padding: 10px 20px;
+    border-radius: 40px;
+    border: 1px solid #888;
+}
+
+.shopcategory-indexsort p span {
+    font-weight: 600;
+}
+
+.shopcategory-products {
+    margin: 20px 170px;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px;
+    row-gap: 80px;
+}
+
+.shopcategory-loadmore {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 150px auto;
+    width: 233px;
+    height: 69px;
+    border-radius: 75px;
+    background: #ededed;
+    color: #787878;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+/* Media Queries */
+
+/* For screens with a max-width of 1280px */
+@media (max-width: 1280px) {
+    .shopcategory-products {
+        grid-template-columns: 1fr 1fr 1fr; /* Reduce to 3 columns */
+        margin: 20px 100px; /* Adjust margins */
+    }
+}
+
+/* For screens with a max-width of 1024px */
+@media (max-width: 1024px) {
+    .shopcategory-products {
+        grid-template-columns: 1fr 1fr; /* Reduce to 2 columns */
+        margin: 20px 50px; /* Further adjust margins */
+    }
+}
+
+/* For screens with a max-width of 800px */
+@media (max-width: 800px) {
+    .shopcategory-products {
+        grid-template-columns: 1fr; /* Reduce to 1 column */
+        margin: 20px 20px; /* Minimize margins */
+    }
+
+    .shopcategory-indexsort {
+        flex-direction: column; /* Stack elements vertically */
+        margin: 0px 20px; /* Adjust margins */
+    }
+
+    .shopcategory-sort {
+        margin-top: 10px; /* Add spacing */
+    }
+}
+
+/* For screens with a max-width of 500px */
+@media (max-width: 500px) {
+    .shopcategory-products {
+        grid-template-columns: 1fr; /* Maintain 1 column */
+        margin: 10px 10px; /* Minimal margins */
+        justify-content: center;
+        align-items: center;
+    }
+
+    .shopcategory-indexsort {
+        margin: 0px 10px; /* Further reduce margins */
+    }
+
+    .shopcategory-sort {
+        width: 100%;
+        padding: 8px 16px; /* Adjust padding */
+        font-size: 0.875rem; /* 14px */
+    }
+
+    .shopcategory-banner {
+        width: 100%;
+    }
+
+    .shopcategory-loadmore {
+        width: 150px;
+        height: 50px;
+        font-size: 16px;
+    }
+}

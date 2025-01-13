@@ -1,0 +1,93 @@
+/* Default Styles */
+.item {
+    width: 280px;
+}
+
+.item img {
+    width: 280px;
+}
+
+.item-image:hover {
+    transform: scale(1.05);
+    transition: transform 1.05s;
+}
+
+.item p {
+    margin: 6px 0px;
+}
+
+.item-prices {
+    display: flex;
+    gap: 20px;
+}
+
+.item-price-new {
+    color: #374151;
+    font-size: 1.125rem; /* 18px */
+    font-weight: 600;
+}
+
+.item-price-old {
+    color: #8c8c8c;
+    font-size: 1.125rem; /* 18px */
+    font-weight: 500;
+    text-decoration: line-through;
+}
+
+/* Media Queries */
+
+/* For screens with a max-width of 1280px */
+@media (max-width: 1280px) {
+    .item {
+        width: 220px;
+    }
+    .item img {
+        width: 220px;
+    }
+    .item-price-new, .item-price-old {
+        font-size: 1rem; /* 16px */
+    }
+}
+
+/* For screens with a max-width of 1024px */
+@media (max-width: 1024px) {
+    .item {
+        width: 170px;
+    }
+    .item img {
+        width: 170px;
+    }
+    .item-price-new, .item-price-old {
+        font-size: 0.875rem; /* 14px */
+    }
+}
+
+/* For screens with a max-width of 800px */
+@media (max-width: 800px) {
+    .item {
+        width: 140px;
+    }
+    .item img {
+        width: 140px;
+    }
+    .item-price-new, .item-price-old {
+        font-size: 0.75rem; /* 12px */
+    }
+}
+
+/* For screens with a max-width of 500px */
+@media (max-width: 500px) {
+    .item {
+        width: 100%; /* Full width */
+    }
+    .item img {
+        width: 100%; /* Full width */
+    }
+    .item-prices {
+        flex-direction: column; /* Stack prices vertically */
+        gap: 10px; /* Reduce gap */
+    }
+    .item-price-new, .item-price-old {
+        font-size: 0.875rem; /* 14px */
+    }
+}
