@@ -28,6 +28,10 @@ coverage/
 .env.test.local
 .env.production.local
 
+
+node_modules/
+backend/node_modules/
+
 # IDE files
 .vscode/
 .idea/
