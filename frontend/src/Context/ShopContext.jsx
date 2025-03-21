@@ -11,6 +11,23 @@ const getDefaultCart = () => {
     return cart;
 };
 
+// Function to fix image URLs that use localhost
+const fixProductImageUrls = (products, backendUrl) => {
+    if (!products || !Array.isArray(products)) return products;
+    
+    return products.map(product => {
+        if (product.image && product.image.includes('localhost')) {
+            // Replace localhost URL with the actual backend URL
+            const fixedImageUrl = product.image.replace(
+                'http://localhost:5000', 
+                backendUrl
+            );
+            return { ...product, image: fixedImageUrl };
+        }
+        return product;
+    });
+};
+
 const ShopContextProvider = (props) => {
     const [all_product, setAll_Product] = useState([]);
     const [cartItems, setCartItems] = useState(getDefaultCart());
@@ -48,7 +65,10 @@ const ShopContextProvider = (props) => {
                     throw new Error('Invalid data format received');
                 }
                 
-                setAll_Product(data);
+                // Fix image URLs if they use localhost
+                const fixedProductData = fixProductImageUrls(data, process.env.REACT_APP_API_URL);
+                
+                setAll_Product(fixedProductData);
                 setError(null);
                 setUsingFallbackData(false);
             } catch (err) {
