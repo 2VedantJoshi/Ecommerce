@@ -21,6 +21,7 @@ const LoginSignup = () => {
         return;
       }
 
+      console.log('Attempting login with URL:', `${process.env.REACT_APP_API_URL}/login`);
       const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
         method: 'POST',
         headers: {
@@ -30,7 +31,9 @@ const LoginSignup = () => {
         body: JSON.stringify(formData),
       });
 
+      console.log('Login response status:', response.status);
       const responseData = await response.json();
+      console.log('Login response data:', responseData);
 
       if (responseData.success) {
         localStorage.setItem('auth-token', responseData.token);
@@ -39,7 +42,7 @@ const LoginSignup = () => {
         alert(responseData.errors || "Login failed");
       }
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Login error details:', error);
       alert("Error during login. Please try again.");
     }
   }
@@ -51,6 +54,7 @@ const LoginSignup = () => {
         return;
       }
 
+      console.log('Attempting signup with URL:', `${process.env.REACT_APP_API_URL}/signup`);
       const response = await fetch(`${process.env.REACT_APP_API_URL}/signup`, {
         method: 'POST',
         headers: {
@@ -60,7 +64,9 @@ const LoginSignup = () => {
         body: JSON.stringify(formData),
       });
 
+      console.log('Signup response status:', response.status);
       const responseData = await response.json();
+      console.log('Signup response data:', responseData);
 
       if (responseData.success) {
         localStorage.setItem('auth-token', responseData.token);
@@ -69,7 +75,7 @@ const LoginSignup = () => {
         alert(responseData.errors || "Signup failed");
       }
     } catch (error) {
-      console.error('Signup error:', error);
+      console.error('Signup error details:', error);
       alert("Error during signup. Please try again.");
     }
   }

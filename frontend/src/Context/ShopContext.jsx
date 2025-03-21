@@ -20,18 +20,40 @@ const ShopContextProvider = (props) => {
         const fetchProducts = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/allproducts`);
+                const apiUrl = `${process.env.REACT_APP_API_URL}/allproducts`;
+                console.log('Attempting to fetch products from:', apiUrl);
+                console.log('Current environment:', process.env.NODE_ENV);
+                console.log('API URL from env:', process.env.REACT_APP_API_URL);
+                
+                const response = await fetch(apiUrl);
+                
+                console.log('Products response status:', response.status);
+                console.log('Response headers:', Object.fromEntries(response.headers.entries()));
                 
                 if (!response.ok) {
                     throw new Error(`Failed to fetch products: ${response.status}`);
                 }
 
                 const data = await response.json();
-                console.log('Fetched products:', data); // Debug log
+                console.log('Products fetched successfully:', {
+                    count: data.length,
+                    sample: data[0],
+                    apiUrl: apiUrl
+                });
+                
+                if (!Array.isArray(data)) {
+                    console.error('Received data is not an array:', data);
+                    throw new Error('Invalid data format received');
+                }
+                
                 setAll_Product(data);
                 setError(null);
             } catch (err) {
-                console.error('Error fetching products:', err);
+                console.error('Error fetching products - Full details:', {
+                    error: err.message,
+                    stack: err.stack,
+                    apiUrl: process.env.REACT_APP_API_URL
+                });
                 setError(err.message);
             } finally {
                 setLoading(false);
@@ -39,28 +61,33 @@ const ShopContextProvider = (props) => {
         };
 
         const fetchCart = async () => {
-            if (localStorage.getItem('auth-token')) {
+            const authToken = localStorage.getItem('auth-token');
+            if (authToken) {
                 try {
+                    console.log('Fetching cart with auth token:', authToken.substring(0, 10) + '...');
                     const response = await fetch(`${process.env.REACT_APP_API_URL}/getcart`, {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json',
-                            'auth-token': localStorage.getItem('auth-token'),
+                            'auth-token': authToken,
                             'Content-Type': 'application/json',
                         },
                         body: "",
                     });
 
+                    console.log('Cart response status:', response.status);
                     if (!response.ok) {
                         throw new Error(`Failed to fetch cart: ${response.status}`);
                     }
 
                     const data = await response.json();
-                    console.log('Fetched cart:', data); // Debug log
+                    console.log('Cart items count:', Object.keys(data).length);
                     setCartItems(data);
                 } catch (err) {
-                    console.error('Error fetching cart:', err);
+                    console.error('Error fetching cart - Full details:', err);
                 }
+            } else {
+                console.log('No auth token found, skipping cart fetch');
             }
         };
 

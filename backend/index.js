@@ -155,13 +155,22 @@ app.post('/removeproduct',async (req,res)=>{
 })
 
 // Creating API for getting all products
-
-app.get('/allproducts',async (req,res)=>{
-    let products = await Product.find({});
-    console.log("All Products Fetched");
-    res.send(products);
-    
-})
+app.get('/allproducts', async (req, res) => {
+    try {
+        console.log('Fetching all products...');
+        let products = await Product.find({});
+        console.log(`Found ${products.length} products`);
+        if (products.length > 0) {
+            console.log('Sample product:', products[0]);
+        } else {
+            console.log('No products found in database');
+        }
+        res.json(products);
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        res.status(500).json({ error: 'Failed to fetch products' });
+    }
+});
 
 //schema creating for user model
 
