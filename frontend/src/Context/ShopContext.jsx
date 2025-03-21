@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
+import all_product_data from '../Components/Assets/all_product';
 
 export const ShopContext = createContext(null);
 
@@ -15,6 +16,7 @@ const ShopContextProvider = (props) => {
     const [cartItems, setCartItems] = useState(getDefaultCart());
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [usingFallbackData, setUsingFallbackData] = useState(false);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -48,13 +50,19 @@ const ShopContextProvider = (props) => {
                 
                 setAll_Product(data);
                 setError(null);
+                setUsingFallbackData(false);
             } catch (err) {
-                console.error('Error fetching products - Full details:', {
+                console.error('Error fetching products - Using fallback data:', {
                     error: err.message,
                     stack: err.stack,
                     apiUrl: process.env.REACT_APP_API_URL
                 });
-                setError(err.message);
+                
+                // Use fallback data from local file
+                console.log('Using fallback data from local files');
+                setAll_Product(all_product_data);
+                setUsingFallbackData(true);
+                setError(`Using fallback data. API error: ${err.message}`);
             } finally {
                 setLoading(false);
             }

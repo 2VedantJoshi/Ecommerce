@@ -11,10 +11,6 @@ const ShopCategory = (props) => {
     return <div className="loading">Loading products...</div>;
   }
 
-  if (error) {
-    return <div className="error">Error: {error}</div>;
-  }
-
   const filteredProducts = all_product.filter(item => props.category === item.category);
 
   if (filteredProducts.length === 0) {
@@ -25,6 +21,11 @@ const ShopCategory = (props) => {
 
   return (
     <div className='shop-category'>
+      {error && (
+        <div className="api-error-notification">
+          {error}
+        </div>
+      )}
       <img className='shopcategory-banner' src={props.banner} alt="" />
       <div className="shopcategory-indexsort">
         <p>
