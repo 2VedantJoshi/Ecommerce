@@ -10,6 +10,11 @@
     align-items: center;
     gap: 10px;
 }
+.nav-logo img{
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
 .nav-logo p{
     font-size: 38px;
     font-weight: 600;
@@ -82,7 +87,8 @@
         padding: 12px 50px;
     }
     .nav-logo img{
-        width: 40px;
+        width: 35px;
+        height: 35px;
     }
     .nav-logo p{
         font-size: 25px;
@@ -109,6 +115,10 @@
 @media(max-width:1024px){
     .navbar{
         padding: 12px 30px;
+    }
+    .nav-logo img{
+        width: 30px;
+        height: 30px;
     }
     .nav-menu{
         gap: 25px;
@@ -161,6 +171,10 @@
     }
     .nav-logo{
         transform: scale(0.8);
+    }
+    .nav-logo img{
+        width: 25px;
+        height: 25px;
     }
     .nav-menu{
         height: 70px;
