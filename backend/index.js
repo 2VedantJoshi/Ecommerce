@@ -1,4 +1,4 @@
-const port = 5000;
+const port = process.env.PORT || 5000;
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -11,16 +11,20 @@ const { stringify } = require('querystring');
 const { log } = require('console');
 require('dotenv').config();
 
+// CORS Configuration
+app.use(cors({
+  origin: process.env.FRONTEND_URL || '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 
 app.use(express.json());
-app.use(cors());
 
 // Database Connection with MongoDB
-mongoose.connect("mongodb+srv://vedantjoshi220:020204@cluster0.jalrsx2.mongodb.net/")
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch(err => console.error("Could not connect to MongoDB", err));
 
-//    .then(() => console.log("Connected to MongoDB"))
-//    .catch(err => console.error("Could not connect to MongoDB", err));
- 
 // API Creation
 // app.listen(port,(error)=>{
 //     if(!error){
