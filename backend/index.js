@@ -26,14 +26,15 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch(err => console.error("Could not connect to MongoDB", err));
 
 // API Creation
-// app.listen(port,(error)=>{
-//     if(!error){
-//         console.log("Server is running on port "+port);
-//     }
-//     else{
-//         console.log("Error in server creation"+error);
-//     }
-// })
+app.listen(port,(error)=>{
+    if(!error){
+        console.log("Server is running on port "+port);
+    }
+    else{
+        console.log("Error in server creation"+error);
+    }
+})
+
 app.get("/", (req, res) => {
     res.send("Express App is Running");
 })
@@ -309,11 +310,3 @@ app.post('/getcart',fetchUser,async (req,res)=>{
     res.json(userData.cartData);
     
 })
-
-app.listen(port, (err) => {
-    if (!err) {
-        console.log("Server running on port " + port);
-    } else {
-        console.error("Error:", err);
-    }
-});
