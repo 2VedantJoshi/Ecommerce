@@ -14,45 +14,63 @@ const LoginSignup = () => {
     setFormData({...formData,[e.target.name]:e.target.value})
   }
 
-  const login = async () =>{
-    console.log("Login Function Executed",formData);
-    let responseData;
-    await fetch('http://localhost:5000/login',{
-      method:'POST',
-      headers:{
-        Accept:'application/form-data',
-        'Content-Type':'application/json',
-      },
-      body:JSON.stringify(formData),
-    }).then((Response)=> Response.json()).then((data)=>responseData=data)
+  const login = async () => {
+    try {
+      if (!formData.email || !formData.password) {
+        alert("Please fill in all fields");
+        return;
+      }
 
-    if(responseData.success){
-      localStorage.setItem('auth-token',responseData.token);
-      window.location.replace("/");
-    }
-    else{
-      alert(responseData.errors)
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const responseData = await response.json();
+
+      if (responseData.success) {
+        localStorage.setItem('auth-token', responseData.token);
+        window.location.replace("/");
+      } else {
+        alert(responseData.errors || "Login failed");
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert("Error during login. Please try again.");
     }
   }
 
-  const signup = async () =>{
-    console.log("Signup Function Executed",formData);
-    let responseData;
-    await fetch('http://localhost:5000/signup',{
-      method:'POST',
-      headers:{
-        Accept:'application/form-data',
-        'Content-Type':'application/json',
-      },
-      body:JSON.stringify(formData),
-    }).then((Response)=> Response.json()).then((data)=>responseData=data)
+  const signup = async () => {
+    try {
+      if (!formData.username || !formData.email || !formData.password) {
+        alert("Please fill in all fields");
+        return;
+      }
 
-    if(responseData.success){
-      localStorage.setItem('auth-token',responseData.token);
-      window.location.replace("/");
-    }
-    else{
-      alert(responseData.errors)
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/signup`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const responseData = await response.json();
+
+      if (responseData.success) {
+        localStorage.setItem('auth-token', responseData.token);
+        window.location.replace("/");
+      } else {
+        alert(responseData.errors || "Signup failed");
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      alert("Error during signup. Please try again.");
     }
   }
 
