@@ -66,17 +66,27 @@ app.use('/images', express.static('upload/images'))
 
 // // Creating upload endpoint for destination
 app.post("/upload", upload.single('product'), (req, res) => {
-//    if (req.file) {
-        res.json({
-            success: 1,
-            image_url: `http://localhost:${port}/images/${req.file.filename}`
-        }) 
-    //  } else {
-//         res.status(400).json({
-//             success: 0,
-//             message: "File upload failed"
-//         });
-//    }
+    if (!req.file) {
+        return res.status(400).json({
+            success: 0,
+            message: "File upload failed - No file received"
+        });
+    }
+
+    // Get base URL from either HOST header or environment variable or fallback
+    const baseUrl = process.env.NODE_ENV === 'production' 
+        ? process.env.BACKEND_URL || req.get('host')
+        : `http://localhost:${port}`;
+    
+    // Create proper URL for the image
+    const imageUrl = `${baseUrl}/images/${req.file.filename}`;
+    
+    console.log(`File uploaded successfully. Image URL: ${imageUrl}`);
+    
+    res.json({
+        success: 1,
+        image_url: imageUrl
+    });
 })
 
 //Schema for creating product

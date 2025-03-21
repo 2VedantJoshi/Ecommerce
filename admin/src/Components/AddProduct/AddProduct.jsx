@@ -4,6 +4,8 @@ import upload_area from '../../assets/upload_area.svg'
 
 const AddProduct = () => {
     const [image,setImage] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const [productDetails,setProductDetails] = useState({
         name: "",
         image:"",
@@ -14,29 +16,40 @@ const AddProduct = () => {
 
     const imageHandler = (e) =>{
         setImage(e.target.files[0]);
+        setErrorMessage("");
     }
 
     const changeHandler = (e) =>{
         setProductDetails({...productDetails,[e.target.name]:e.target.value})
+        setErrorMessage("");
     }
 
     const Add_Product = async () => {
         try {
+            setErrorMessage("");
+            setLoading(true);
+            
             if (!image) {
-                alert("Please select an image");
+                setErrorMessage("Please select an image");
+                setLoading(false);
                 return;
             }
 
             if (!productDetails.name || !productDetails.new_price || !productDetails.old_price) {
-                alert("Please fill all the fields");
+                setErrorMessage("Please fill all the required fields");
+                setLoading(false);
                 return;
             }
 
+            const backendUrl = import.meta.env.VITE_BACKEND_URL;
+            console.log('Using backend URL:', backendUrl);
+            
             let formData = new FormData();
             formData.append('product', image);
 
             // First, upload the image
-            const uploadResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/upload`, {
+            console.log('Uploading image to:', `${backendUrl}/upload`);
+            const uploadResponse = await fetch(`${backendUrl}/upload`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -44,23 +57,36 @@ const AddProduct = () => {
                 body: formData,
             });
 
+            console.log('Upload response status:', uploadResponse.status);
+            
             if (!uploadResponse.ok) {
-                throw new Error('Image upload failed');
+                const errorText = await uploadResponse.text();
+                console.error('Image upload failed:', errorText);
+                throw new Error(`Image upload failed: ${uploadResponse.status} ${errorText}`);
             }
 
             const responseData = await uploadResponse.json();
+            console.log('Upload response data:', responseData);
             
             if (responseData.success) {
-                // Update the image URL to use the backend URL instead of localhost
-                const imageUrl = responseData.image_url.replace('http://localhost:5000', import.meta.env.VITE_BACKEND_URL);
+                // Fix the image URL to ensure it uses the correct backend URL
+                let imageUrl = responseData.image_url;
+                
+                // Replace any localhost URL with the backend URL
+                if (imageUrl.includes('localhost')) {
+                    imageUrl = imageUrl.replace(/http:\/\/localhost:\d+/g, backendUrl);
+                    console.log('Fixed image URL:', imageUrl);
+                }
                 
                 const product = {
                     ...productDetails,
                     image: imageUrl
                 };
 
+                console.log('Adding product with data:', product);
+
                 // Then, add the product
-                const addProductResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/addproduct`, {
+                const addProductResponse = await fetch(`${backendUrl}/addproduct`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -69,11 +95,16 @@ const AddProduct = () => {
                     body: JSON.stringify(product),
                 });
 
+                console.log('Add product response status:', addProductResponse.status);
+                
                 if (!addProductResponse.ok) {
-                    throw new Error('Failed to add product');
+                    const errorText = await addProductResponse.text();
+                    console.error('Failed to add product:', errorText);
+                    throw new Error(`Failed to add product: ${addProductResponse.status} ${errorText}`);
                 }
 
                 const addProductData = await addProductResponse.json();
+                console.log('Add product response data:', addProductData);
                 
                 if (addProductData.success) {
                     alert("Product Added Successfully!");
@@ -87,19 +118,26 @@ const AddProduct = () => {
                     });
                     setImage(false);
                 } else {
-                    alert("Failed to add product: " + (addProductData.message || "Unknown error"));
+                    setErrorMessage("Failed to add product: " + (addProductData.message || "Unknown error"));
                 }
             } else {
-                alert("Failed to upload image: " + (responseData.message || "Unknown error"));
+                setErrorMessage("Failed to upload image: " + (responseData.message || "Unknown error"));
             }
         } catch (error) {
             console.error('Error adding product:', error);
-            alert("Error adding product: " + error.message);
+            setErrorMessage("Error adding product: " + error.message);
+        } finally {
+            setLoading(false);
         }
     }
 
     return (
         <div className='add-product'>
+            {errorMessage && (
+                <div className="error-message">
+                    {errorMessage}
+                </div>
+            )}
             <div className="addproduct-itemfield">
                 <p>Product Title</p>
                 <input value={productDetails.name} onChange={changeHandler} type="text" name='name' placeholder='Type Here'/>
@@ -128,7 +166,13 @@ const AddProduct = () => {
                 </label>
                 <input onChange={imageHandler} type="file" name='image' id='file-input' hidden />
             </div>
-            <button onClick={Add_Product} className='addproduct-btn'>ADD</button>
+            <button 
+                onClick={Add_Product} 
+                className='addproduct-btn'
+                disabled={loading}
+            >
+                {loading ? 'ADDING...' : 'ADD'}
+            </button>
         </div>
     )
 }
