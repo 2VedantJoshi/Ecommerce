@@ -5,12 +5,12 @@ import cart_icon from '../Assets/cart_icon.png'
 import { Link } from 'react-router-dom'
 import nav_dropdown from '../Assets/nav_dropdown.png'
 import { ShopContext } from '../../Context/ShopContext'
+
 const Navbar = () => {
 
     const [menu,setMenu] = useState("shop");
     const {getTotalItems} = useContext(ShopContext);
-    const menuRef =useRef();
-    const cartRef = useRef();
+    const menuRef = useRef();
 
     const dropdown_toggle = (e) =>{
         menuRef.current.classList.toggle('nav-menu-visible');
